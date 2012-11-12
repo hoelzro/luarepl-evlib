@@ -280,4 +280,5 @@ luarepl_ev_start(lua_State *L, struct ev_loop *loop, const char *bind_addr, uint
  *   - Logging
  *   - Split up client_sock_cb
  *   - Handle ruh-roh's
+ *   - Implement "advanced client"
  */
