@@ -1,4 +1,4 @@
-# luarepl-evlib - Use luarepl ina a program that's already using an event loop
+# luarepl-evlib - Use luarepl in a program that's already using an event loop
 
 Some programs already use Lua as a scripting language, and also use an event loop.
 By linking against the shared library that this project produces and invoking a function,
