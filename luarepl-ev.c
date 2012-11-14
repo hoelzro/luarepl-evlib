@@ -287,8 +287,9 @@ luarepl_ev_displayresults(lua_State *L)
                 lua_pushliteral(L, "\t");
             }
         }
+        lua_pushliteral(L, "\n");
 
-        lua_concat(L, 2 * n - 1);
+        lua_concat(L, 2 * n);
         lua_pushvalue(L, 1);
         lua_insert(L, -2);
         luaR_callmethod(L, "send", 1, 0);
