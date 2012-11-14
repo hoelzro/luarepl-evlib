@@ -225,6 +225,8 @@ server_sock_cb(EV_P_ ev_io *w, int revents)
 
         lua_rawgeti(lua_server->L, LUA_REGISTRYINDEX, lua_server->repl_ref);
         luaR_callmethod(lua_server->L, "clone", 0, 1);
+        lua_pushinteger(lua_server->L, client_sock);
+        lua_setfield(lua_server->L, -2, "_fd");
 
         /* I should probably set the FD to non-blocking */
         ev_io_init((ev_io *) client_sock_w, client_sock_cb, client_sock, EV_READ);
