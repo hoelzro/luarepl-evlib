@@ -289,6 +289,8 @@ add_repl_methods(lua_State *L)
 {
     luaL_Reg methods[] = {
         { "displayresults", luarepl_ev_displayresults },
+        { "displayerror", luarepl_ev_send },
+        { "showprompt", luarepl_ev_send },
         { "send", luarepl_ev_send },
         { NULL, NULL }
     };
