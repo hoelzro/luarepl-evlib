@@ -251,7 +251,16 @@ static struct lua_server_io server_sock_w;
 static int
 luarepl_ev_send(lua_State *L)
 {
-    printf("sending: %s\n", lua_tostring(L, 2));
+    int fd;
+    const char *string;
+    size_t length;
+
+    lua_getfield(L, 1, "_fd");
+    fd = lua_tointeger(L, -1);
+    lua_pop(L, 1);
+    string = lua_tolstring(L, 2, &length);
+    /* XXX make sure write is OK */
+    write(fd, string, length);
 
     return 0;
 }
