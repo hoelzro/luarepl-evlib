@@ -134,7 +134,8 @@ process_line(struct lua_client_io *lua_w, const char *line)
 
     lua_rawgeti(L, LUA_REGISTRYINDEX, lua_w->repl_ref);
     lua_pushstring(L, line);
-    luaR_callmethod(L, "handleline", 1, 0); /* we discard the return value for now */
+    luaR_callmethod(L, "handleline", 1, 1);
+    luaR_callmethod(L, "prompt", 1, 0);
     lua_pop(L, 1); /* pop repl object */
 }
 
