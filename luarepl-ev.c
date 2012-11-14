@@ -77,6 +77,19 @@ luaR_callmethod(lua_State *L, const char *method, int nargs, int nret)
     lua_call(L, nargs + 1, nret);
 }
 
+static const char *
+luaR_tostring(lua_State *L, int index)
+{
+    const char *string_value;
+
+    lua_pushvalue(L, index); // value
+    lua_getglobal(L, "tostring"); // value tostring
+    lua_insert(L, -2); // tostring value
+    lua_call(L, 1, 1); // tostring(value);
+
+    return lua_tostring(L, -1);
+}
+
 static int
 setup_server_socket(lua_State *L, const char *bind_addr, uint16_t port)
 {
@@ -243,15 +256,31 @@ luarepl_ev_send(lua_State *L)
 static int
 luarepl_ev_displayresults(lua_State *L)
 {
-    lua_settop(L, 1);
+    int i;
+    int n;
 
-    lua_getglobal(L, "print");
-    lua_getglobal(L, "unpack");
-    lua_pushvalue(L, 1);
-    lua_pushinteger(L, 1);
-    lua_getfield(L, 1, "n");
-    lua_call(L, 3, -1);
-    lua_call(L, lua_gettop(L) - 2, 0); /* 1 for the table, 1 for print */
+    lua_settop(L, 2);
+    lua_getfield(L, 2, "n");
+    n = lua_tointeger(L, -1);
+    lua_pop(L, 1);
+    lua_checkstack(L, 2 * n + 1);
+
+    if(n) {
+        for(i = 1; i <= n; i++) {
+            lua_rawgeti(L, 2, i);
+            luaR_tostring(L, -1);
+            lua_remove(L, -2);
+
+            if(i != n) {
+                lua_pushliteral(L, "\t");
+            }
+        }
+
+        lua_concat(L, 2 * n - 1);
+        lua_pushvalue(L, 1);
+        lua_insert(L, -2);
+        luaR_callmethod(L, "send", 1, 0);
+    }
     return 0;
 }
 
