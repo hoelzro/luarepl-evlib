@@ -332,12 +332,9 @@ luarepl_ev_start(lua_State *L, struct ev_loop *loop, const char *bind_addr, uint
 
 /* TODO
  *
- *   - Make sure we show the prompt
- *   - Implement the rest of the required methods
  *   - Make the interface less specific to libev
  *   - Function naming conventions?
  *   - Implement "advanced client" mode (detected with high byte or something)
- *   - Properly implement displayresults
  *   - Logging
  *   - Split up client_sock_cb
  *   - Handle ruh-roh's
