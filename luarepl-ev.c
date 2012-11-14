@@ -232,7 +232,14 @@ server_sock_cb(EV_P_ ev_io *w, int revents)
 
 static struct lua_server_io server_sock_w;
 
-/* XXX this should return the results to the client */
+static int
+luarepl_ev_send(lua_State *L)
+{
+    printf("sending: %s\n", lua_tostring(L, 2));
+
+    return 0;
+}
+
 static int
 luarepl_ev_displayresults(lua_State *L)
 {
@@ -253,6 +260,7 @@ add_repl_methods(lua_State *L)
 {
     luaL_Reg methods[] = {
         { "displayresults", luarepl_ev_displayresults },
+        { "send", luarepl_ev_send },
         { NULL, NULL }
     };
 
