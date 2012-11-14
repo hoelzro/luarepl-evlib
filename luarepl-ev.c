@@ -297,13 +297,23 @@ luarepl_ev_displayresults(lua_State *L)
     return 0;
 }
 
+static int
+luarepl_ev_showprompt(lua_State *L)
+{
+    lua_settop(L, 2);
+    lua_pushliteral(L, " ");
+    lua_concat(L, 2);
+    luaR_callmethod(L, "send", 1, 0);
+    return 0;
+}
+
 static void
 add_repl_methods(lua_State *L)
 {
     luaL_Reg methods[] = {
         { "displayresults", luarepl_ev_displayresults },
         { "displayerror", luarepl_ev_send },
-        { "showprompt", luarepl_ev_send },
+        { "showprompt", luarepl_ev_showprompt },
         { "send", luarepl_ev_send },
         { NULL, NULL }
     };
